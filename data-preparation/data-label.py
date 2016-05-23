@@ -1,7 +1,7 @@
 import pandas as pd
 import pprint as pp
 
-data = pd.read_csv('data/DataSet.csv')
+data = pd.read_csv('../data/DataSet.csv')
 
 #print(data)
 
