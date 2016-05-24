@@ -17,3 +17,4 @@ df = pd.DataFrame(dData, columns=['count', 'Miss %', 'Card', 'min', '25%', 'mean
 df.columns = ['Count', 'Miss %', 'Card', 'Min', '1st Qrt', 'Mean', 'Median', '3rd Qrt', 'Max', 'Std']
 #storage
 df.to_csv('../data/boucher-zankowitch-DQR-ContinuousFeatures.csv')
+
