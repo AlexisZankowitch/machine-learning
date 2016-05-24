@@ -15,4 +15,5 @@ for i in range(0, len(continuousFeaturesList)):
 
 df = pd.DataFrame(dData, columns=['count', 'Miss %', 'Card', 'min', '25%', 'mean', '50%', '75%', 'max', 'std'])
 df.columns = ['Count', 'Miss %', 'Card', 'Min', '1st Qrt', 'Mean', 'Median', '3rd Qrt', 'Max', 'Std']
-print(df)
+#storage
+df.to_csv('../data/boucher-zankowitch-DQR-ContinuousFeatures.csv')
