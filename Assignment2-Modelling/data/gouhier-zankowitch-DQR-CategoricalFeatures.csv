@@ -1,10 +1,11 @@
 ,Count,Miss %,Card,Mode,Mode freq,Mode %,2nd Mode,2nd Mode Freq,2nd Mode %
-job,45211,0.0,12,blue-collar,9732,21.5,management,9458,20.9
-marital,45211,0.0,3,married,27214,60.2,single,12790,28.3
-education,45211,0.0,4,secondary,23202,51.3,tertiary,13301,29.4
-default,45211,0.0,2,no,44396,98.2,yes,815,1.8
-housing,45211,0.0,2,yes,25130,55.6,no,20081,44.4
-loan,45211,0.0,2,no,37967,84.0,yes,7244,16.0
-contact,45211,0.0,3,cellular,29285,64.8,unknown,13020,28.8
-month,45211,0.0,12,may,13766,30.4,jul,6895,15.3
-poutcome,45211,0.0,4,unknown,36959,81.7,failure,4901,10.8
+job,41188,0.0,12,admin.,10422,25.3,blue-collar,9254,22.5
+marital,41188,0.0,4,married,24928,60.5,single,11568,28.1
+education,41188,0.0,8,university.degree,12168,29.5,high.school,9515,23.1
+default,41188,0.0,3,no,32588,79.1,unknown,8597,20.9
+housing,41188,0.0,3,yes,21576,52.4,no,18622,45.2
+loan,41188,0.0,3,no,33950,82.4,yes,6248,15.2
+contact,41188,0.0,2,cellular,26144,63.5,telephone,15044,36.5
+month,41188,0.0,10,may,13769,33.4,jul,7174,17.4
+day_of_week,41188,0.0,5,thu,8623,20.9,mon,8514,20.7
+poutcome,41188,0.0,3,nonexistent,35563,86.3,failure,4252,10.3

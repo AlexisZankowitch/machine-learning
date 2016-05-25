@@ -5,7 +5,7 @@ dData = data.describe().transpose()
 dData = dData.drop('y')
 
 categoricalFeaturesList = ['job', 'marital', 'education', 'default',
-                           'housing', 'loan', 'contact', 'month', 'poutcome']
+                           'housing', 'loan', 'contact', 'month', 'day_of_week', 'poutcome']
 dData['Mode %'] = None
 dData['Mode2'] = None
 dData['Mode2 freq'] = None
