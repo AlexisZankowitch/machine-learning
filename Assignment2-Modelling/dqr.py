@@ -1,6 +1,6 @@
 import pandas as pd
 
-data = pd.read_csv('../data/person/DataSet.csv').select_dtypes(include=[object])
+data = pd.read_csv('../data/bank/DataSet.csv').select_dtypes(include=[object])
 dData = data.describe().transpose()
 dData = dData.drop('id')
 dData = dData.drop('target')
@@ -24,4 +24,4 @@ for i in range(0, len(categoricalFeaturesList)):
 df = pd.DataFrame(dData, columns=['count', 'Miss', 'unique', 'top', 'freq', 'Mode %', 'Mode2', 'Mode2 freq', 'Mode2 %'])
 df.columns = ['Count', 'Miss %', 'Card', 'Mode', 'Mode freq', 'Mode %', '2nd Mode', '2nd Mode Freq', '2nd Mode %']
 #storage
-df.to_csv('../data/person/boucher-zankowitch-DQR-CategoricalFeatures.csv')
+df.to_csv('../data/boucher-zankowitch-DQR-CategoricalFeatures.csv')

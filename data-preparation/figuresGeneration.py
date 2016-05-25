@@ -2,7 +2,7 @@ import pandas as pd
 import plotly.offline as py
 import plotly.graph_objs as go
 
-dataCsv = pd.read_csv('../data/DataSet.csv')
+dataCsv = pd.read_csv('../data/person/DataSet.csv')
 
 for col in dataCsv.columns:
     #if the column is continuous and that they have a cardinality higher than 10, histogram !
@@ -20,4 +20,4 @@ for col in dataCsv.columns:
                 y=dataCsv[col].value_counts().values
             )
         ]
-    plot_url = py.plot(data, filename="../data/figures/"+col+".html")
+    plot_url = py.plot(data, filename="../data/figures/person/"+col+".html")
