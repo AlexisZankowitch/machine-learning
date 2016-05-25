@@ -32,13 +32,13 @@ if (fromUrl):
 else:
     #Reading the dataset from a local file
     #---------------------------------------------
-    censusData = pd.read_csv("../Datasets/censusDataRaw.csv",index_col=False,na_values=['?'],nrows=32560)
+    censusData = pd.read_csv("../data/bank/bank-additional-full.csv",index_col=False,na_values=['N/A'],nrows=45211)
 
 
 # Extract Target Feature
-targetLabels = censusData['annualincome']
+targetLabels = censusData['y']
 # Extract Numeric Descriptive Features
-numeric_features = ['age','fnlwgt','education-num','capital-gain','capital-loss','hours-per-week']
+numeric_features = ['age','job','marital','education','default','balance','housing','loan', 'contact','day','month','duration','campaign','pdays','previous','poutcome']
 numeric_dfs = censusData[numeric_features]
 # Extract Categorical Descriptive Features
 cat_dfs = censusData.drop(numeric_features + ['annualincome'],axis=1)
