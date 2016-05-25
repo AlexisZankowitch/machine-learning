@@ -1,0 +1,10 @@
+,Count,Miss %,Card,Mode,Mode freq,Mode %,2nd Mode,2nd Mode Freq,2nd Mode %
+job,45211,0.0,12,blue-collar,9732,21.5,management,9458,20.9
+marital,45211,0.0,3,married,27214,60.2,single,12790,28.3
+education,45211,0.0,4,secondary,23202,51.3,tertiary,13301,29.4
+default,45211,0.0,2,no,44396,98.2,yes,815,1.8
+housing,45211,0.0,2,yes,25130,55.6,no,20081,44.4
+loan,45211,0.0,2,no,37967,84.0,yes,7244,16.0
+contact,45211,0.0,3,cellular,29285,64.8,unknown,13020,28.8
+month,45211,0.0,12,may,13766,30.4,jul,6895,15.3
+poutcome,45211,0.0,4,unknown,36959,81.7,failure,4901,10.8
