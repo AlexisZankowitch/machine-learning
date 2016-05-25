@@ -17,16 +17,18 @@ import pandas as pd
 
 #Reading the dataset from a local file
 #---------------------------------------------
-censusData = pd.read_csv("../data/data/data-full.csv",index_col=False,na_values=['N/A'],nrows=45211,usecols=['age','job','marital','education','default','balance','housing','loan','contact','day','month','duration','campaign','pdays','previous','poutcome','y'])
+censusData = pd.read_csv("data/bank-full-2.csv",index_col=False,na_values=['N/A'],nrows=45211,usecols=['age','job','marital','education','default','balance','housing','loan','contact','day','month','duration','campaign','pdays','previous','poutcome','y'])
+
 
 
 # Extract Target Feature
 targetLabels = censusData['y']
 # Extract Numeric Descriptive Features
-numeric_features = ['age','job','marital','education','default','balance','housing','loan','contact','day','month','duration','campaign','pdays','previous','poutcome']
+numeric_features = ['age','balance','day','duration','campaign','pdays','previous']
 numeric_dfs = censusData[numeric_features]
 # Extract Categorical Descriptive Features
 cat_dfs = censusData.drop(numeric_features + ['y'],axis=1)
+
 # Remove missing values and apply one-hot encoding
 cat_dfs.replace('N/A','NA')
 cat_dfs.fillna( 'NA', inplace = True )
@@ -34,7 +36,8 @@ cat_dfs.fillna( 'NA', inplace = True )
 cat_dfs = cat_dfs.T.to_dict().values()
 #convert to numeric encoding
 vectorizer = DictVectorizer( sparse = False )
-vec_cat_dfs = vectorizer.fit_transform(cat_dfs) 
+vec_cat_dfs = vectorizer.fit_transform(cat_dfs)
+
 # Merge Categorical and Numeric Descriptive Features
 train_dfs = np.hstack((numeric_dfs.as_matrix(), vec_cat_dfs ))
 
@@ -45,6 +48,7 @@ train_dfs = np.hstack((numeric_dfs.as_matrix(), vec_cat_dfs ))
 #create an instance of a decision tree model.
 decTreeModel = tree.DecisionTreeClassifier(criterion='entropy')
 #fit the model using the numeric representations of the training data
+
 decTreeModel.fit(train_dfs, targetLabels)
 
 
@@ -94,5 +98,4 @@ scores=cross_validation.cross_val_score(decTreeModel3, instances_train, target_t
 print("Gini based Model:")
 print("Score by fold: " + str(scores))
 print("Accuracy: %0.4f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
-
 
