@@ -14,36 +14,21 @@ from sklearn.metrics import accuracy_score
 import numpy as np
 import pandas as pd
 
-fromUrl = False
 
-
-if (fromUrl):
-    #Reading the dataset from an online repository:
-    #-----------------------------------------------
-    fileUrl = 'https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data'
-    #define the list of column headings for the dataset. This list is based on the documentation
-    #for the dataset available at: 
-    #https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.names
-    columnHeadings=['age','workclass','fnlwgt','education','education-num','marital-status','occupation','relationship','race','sex','capital-gain','capital-loss','hours-per-week','native-country','annualincome']
-    # we can directly use read_csv to download the file
-    censusData = pd.read_csv(fileUrl,header=None,names=columnHeadings,index_col=False,na_values=['?'],nrows=32560)
-    # save the file locally 
-    censusData.to_csv('../Datasets/censusDataRaw.csv',index=False)
-else:
-    #Reading the dataset from a local file
-    #---------------------------------------------
-    censusData = pd.read_csv("../data/bank/bank-additional-full.csv",index_col=False,na_values=['N/A'],nrows=45211)
+#Reading the dataset from a local file
+#---------------------------------------------
+censusData = pd.read_csv("../data/bank/bank-full.csv",index_col=False,na_values=['N/A'],nrows=45211,usecols=['age','job','marital','education','default','balance','housing','loan','contact','day','month','duration','campaign','pdays','previous','poutcome','y'])
 
 
 # Extract Target Feature
 targetLabels = censusData['y']
 # Extract Numeric Descriptive Features
-numeric_features = ['age','job','marital','education','default','balance','housing','loan', 'contact','day','month','duration','campaign','pdays','previous','poutcome']
+numeric_features = ['age','job','marital','education','default','balance','housing','loan','contact','day','month','duration','campaign','pdays','previous','poutcome']
 numeric_dfs = censusData[numeric_features]
 # Extract Categorical Descriptive Features
-cat_dfs = censusData.drop(numeric_features + ['annualincome'],axis=1)
+cat_dfs = censusData.drop(numeric_features + ['y'],axis=1)
 # Remove missing values and apply one-hot encoding
-cat_dfs.replace('?','NA')
+cat_dfs.replace('N/A','NA')
 cat_dfs.fillna( 'NA', inplace = True )
 #transpose into array of dictionaries (one dict per instance) of feature:level pairs
 cat_dfs = cat_dfs.T.to_dict().values()
@@ -61,29 +46,6 @@ train_dfs = np.hstack((numeric_dfs.as_matrix(), vec_cat_dfs ))
 decTreeModel = tree.DecisionTreeClassifier(criterion='entropy')
 #fit the model using the numeric representations of the training data
 decTreeModel.fit(train_dfs, targetLabels)
-
-#---------------------------------------------------------------
-#   Define 2 Queries, Make Predictions, Map Predictions to Levels
-#---------------------------------------------------------------
-
-q = {'age':[39,50],'workclass':['State-gov','Self-emp-not-inc'],'fnlwgt':[77516,83311],'education':['Bachelors','Bachelors'],'education-num':[13,13],'marital-status':['Never-married','Married-civ-spouse'],'occupation':['Adm-clerical','Exec-managerial'],'relationhip':['Not-in-family','Husband'],'race':['White','White'],'sex':['Male','Male'],'capital-gain':[2174,0],'capital-loss':[0,0],'hours-per-week':[40,13],'native_country':['United-States','United-States']}
-col_names = ['age','workclass','fnlwgt','education','education-num','marital-status','occupation','relationhip','race','sex','capital-gain','capital-loss','hours-per-week','native_country']
-qdf = pd.DataFrame.from_dict(q,orient="columns")
-#extract the numeric features
-q_num = qdf[numeric_features].as_matrix() 
-#convert the categorical features
-q_cat = qdf.drop(numeric_features,axis=1)
-q_cat_dfs = q_cat.T.to_dict().values()
-q_vec_dfs = vectorizer.transform(q_cat_dfs) 
-#merge the numeric and categorical features
-query = np.hstack((q_num, q_vec_dfs ))
-#Use the model to make predictions for the 2 queries
-predictions = decTreeModel.predict([query[0],query[1]])
-print("Predictions!")
-print("------------------------------")
-print(predictions)
-
-
 
 
 #--------------------------------------------
