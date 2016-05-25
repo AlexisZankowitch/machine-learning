@@ -6,7 +6,10 @@ dData = dData.drop('y')
 dData = data.describe().transpose()
 
 # CONTINUOUS FEATURES
-continuousFeaturesList = ['age', 'balance', 'day', 'duration', 'campaign', 'pdays', 'previous']
+continuousFeaturesList = ['age', 'balance', 'day', 'duration',
+                          'campaign', 'pdays', 'previous',
+                          'emp.var.rate', 'cons.price.idx',
+                          'cons.conf.idx', 'euribor3m', 'nr.employed']
 
 # add columns
 dData['Miss %'] = ""
