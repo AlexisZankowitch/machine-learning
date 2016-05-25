@@ -17,7 +17,7 @@ import pandas as pd
 
 #Reading the dataset from a local file
 #---------------------------------------------
-censusData = pd.read_csv("../data/bank/bank-full.csv",index_col=False,na_values=['N/A'],nrows=45211,usecols=['age','job','marital','education','default','balance','housing','loan','contact','day','month','duration','campaign','pdays','previous','poutcome','y'])
+censusData = pd.read_csv("../data/data/data-full.csv",index_col=False,na_values=['N/A'],nrows=45211,usecols=['age','job','marital','education','default','balance','housing','loan','contact','day','month','duration','campaign','pdays','previous','poutcome','y'])
 
 
 # Extract Target Feature
