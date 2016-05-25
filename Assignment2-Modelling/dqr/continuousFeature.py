@@ -1,7 +1,9 @@
 import pandas as pd
 
-data = pd.read_csv('../data/bank-full-2.csv')
-continuousFeaturesList = ["age", "balance", "day", "duration", "campaign", "pdays", "previous"]
+data = pd.read_csv('../data/bank-additional-full-2.csv')
+continuousFeaturesList = ["age", "duration", "campaign",
+                          "pdays", "previous", "emp.var.rate",
+                          "euribor3m", "nr.employed"]
 dData = data.describe().transpose()
 dData['Miss %'] = ""
 dData['Card'] = ""

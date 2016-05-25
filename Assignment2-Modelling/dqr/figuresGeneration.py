@@ -2,7 +2,7 @@ import pandas as pd
 import plotly.offline as py
 import plotly.graph_objs as go
 
-dataCsv = pd.read_csv('../data/bank-full-2.csv')
+dataCsv = pd.read_csv('../data/bank-additional-full-2.csv')
 
 for col in dataCsv.columns:
     #if the column is continuous and that they have a cardinality higher than 10, histogram !

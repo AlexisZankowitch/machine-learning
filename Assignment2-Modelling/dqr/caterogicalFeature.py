@@ -1,6 +1,6 @@
 import pandas as pd
 
-data = pd.read_csv('../data/bank-full-2.csv').select_dtypes(include=[object])
+data = pd.read_csv('../data/bank-additional-full-2.csv').select_dtypes(include=[object])
 dData = data.describe().transpose()
 dData = dData.drop('y')
 
