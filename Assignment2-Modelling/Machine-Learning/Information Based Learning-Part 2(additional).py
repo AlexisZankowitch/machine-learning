@@ -13,9 +13,11 @@ from sklearn.metrics import accuracy_score
 import numpy as np
 import pandas as pd
 
+fold_cv = 5
+
 # Reading the dataset from a local file
 # ---------------------------------------------
-censusData = pd.read_csv("data/bank-additional-full-2.csv", index_col=False, na_values=['N/A'], nrows=45211)
+censusData = pd.read_csv("../data/bank/bank-additional-full-2.csv", index_col=False, na_values=['N/A'], nrows=45211)
 
 # Extract Target Feature
 targetLabels = censusData['y']
@@ -37,15 +39,6 @@ vec_cat_dfs = vectorizer.fit_transform(cat_dfs)
 # Merge Categorical and Numeric Descriptive Features
 train_dfs = np.hstack((numeric_dfs.as_matrix(), vec_cat_dfs))
 
-# ---------------------------------------------------------------
-#   Create and train a decision tree model using sklearn api
-# ---------------------------------------------------------------
-# create an instance of a decision tree model.
-decTreeModel = tree.DecisionTreeClassifier(criterion='entropy')
-# fit the model using the numeric representations of the training data
-
-decTreeModel.fit(train_dfs, targetLabels)
-
 # --------------------------------------------
 # Hold-out Test Set + Confusion Matrix
 # --------------------------------------------
@@ -53,7 +46,7 @@ decTreeModel.fit(train_dfs, targetLabels)
 decTreeModel2 = tree.DecisionTreeClassifier(criterion='entropy')
 # Split the data: 60% training : 40% test set
 instances_train, instances_test, target_train, target_test = cross_validation.train_test_split(train_dfs, targetLabels,
-                                                                                               test_size=0.4,
+                                                                                               test_size=0.2,
                                                                                                random_state=0)
 # fit the model using just the test set
 decTreeModel2.fit(instances_train, target_train)
@@ -81,8 +74,8 @@ plt.show()
 # --------------------------------------------
 # Cross-validation to Compare to Models
 # --------------------------------------------
-# run a 10 fold cross validation on this model using the full census data
-scores = cross_validation.cross_val_score(decTreeModel2, instances_train, target_train, cv=10)
+# run a 5 fold cross validation on this model using the full census data
+scores = cross_validation.cross_val_score(decTreeModel2, instances_train, target_train, cv=fold_cv)
 # the cross validaton function returns an accuracy score for each fold
 print("Entropy based Model:")
 print("Score by fold: " + str(scores))
@@ -91,7 +84,7 @@ print("Accuracy: %0.4f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
 print("\n\n")
 # for a comparison we will do the same experiment using a decision tree that uses the Gini impurity metric
 decTreeModel3 = tree.DecisionTreeClassifier(criterion='gini')
-scores = cross_validation.cross_val_score(decTreeModel3, instances_train, target_train, cv=10)
+scores = cross_validation.cross_val_score(decTreeModel3, instances_train, target_train, cv=fold_cv)
 print("Gini based Model:")
 print("Score by fold: " + str(scores))
 print("Accuracy: %0.4f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
