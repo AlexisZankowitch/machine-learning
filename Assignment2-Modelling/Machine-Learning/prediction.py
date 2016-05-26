@@ -19,7 +19,7 @@ import randomForestPrediction
 fold_cv = 5
     
 def doPredictions(train_dfs, targetLabels):
-    treeVar,   instances_train_tree,     target_train_tree,     target_test_tree,     predictionsTree     = treePrediction.treePrediction(train_dfs, targetLabels, fold_cv)
+    treeVar,   instances_train_tree,     target_train_tree,     target_test_tree,     predictionsTree    = treePrediction.treePrediction(train_dfs, targetLabels)
     neighbor, instances_train_neighbor, target_train_neighbor, target_test_neighbor, predictionsNeighbor = neighborsPrediction.neighborsPrediction(train_dfs, targetLabels, fold_cv)
     randFor,  instances_train_randFor,  target_train_randFor,  target_test_randFor,  predictionsRandFor  = randomForestPrediction.randomForestPrediction(train_dfs, targetLabels, fold_cv)
         

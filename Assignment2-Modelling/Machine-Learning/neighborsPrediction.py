@@ -37,8 +37,8 @@ def neighborsPrediction(train_dfs, targetLabels, fold_cv):
     plt.show()
     print(n_neighbors)
     
-    predictions = neighbor.predict(instances_test)
-    
+    neighbor, instances_train, instances_test, target_train, target_test, scoresNeighborTmp = testScore(train_dfs, targetLabels, fold_cv, n_neighbors)
+    predictions = neighbor.predict(instances_test)   
     return neighbor, instances_train, target_train, target_test, predictions
     
 def testScore(train_dfs, targetLabels, fold_cv, n_neighbors):
