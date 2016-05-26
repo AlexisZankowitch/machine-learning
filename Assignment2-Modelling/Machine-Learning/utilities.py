@@ -14,7 +14,8 @@ def mean_calculation(scores, instances):
 
 def scores_calculation(instances, my_tree, target, nb_cv):
     # TODO dynamically this table
-    scores = [[], [], [], [], [], [], [], [], [], [], [], []]
+    # , [], [], [], [], [], [], [], [], [], []
+    scores = [[], []]
     for y in range(0, len(scores)):
         for x in range(0, len(instances)):
             # run a 5 fold cross validation on this model using the full census data

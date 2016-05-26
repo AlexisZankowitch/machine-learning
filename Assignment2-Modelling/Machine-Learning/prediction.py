@@ -17,34 +17,41 @@ import neighborsPrediction
 import randomForestPrediction
 
 fold_cv = 5
-    
+
+
 def doPredictions(train_dfs, targetLabels):
-    treeVar,   instances_train_tree,     target_train_tree,     target_test_tree,     predictionsTree    = treePrediction.treePrediction(train_dfs, targetLabels)
-    neighbor, instances_train_neighbor, target_train_neighbor, target_test_neighbor, predictionsNeighbor = neighborsPrediction.neighborsPrediction(train_dfs, targetLabels, fold_cv)
-    randFor,  instances_train_randFor,  target_train_randFor,  target_test_randFor,  predictionsRandFor  = randomForestPrediction.randomForestPrediction(train_dfs, targetLabels, fold_cv)
-        
-    printPredictions(treeVar,  instances_train_tree,     target_train_tree,     target_test_tree,     predictionsTree,
-                     neighbor, instances_train_neighbor, target_train_neighbor, target_test_neighbor, predictionsNeighbor,
-                     randFor,  instances_train_randFor,  target_train_randFor,  target_test_randFor,  predictionsRandFor)
-    
-def printPredictions(treeVar,  instances_train_tree,     target_train_tree,     target_test_tree,     predictionsTree,
-                     neighbor, instances_train_neighbor, target_train_neighbor, target_test_neighbor, predictionsNeighbor,
-                     randFor,  instances_train_randFor,  target_train_randFor,  target_test_randFor,  predictionsRandFor):
-     # Output the accuracy score of the model on the test set
+    treeVar, instances_train_tree, target_train_tree, target_test_tree, predictionsTree = treePrediction.treePrediction(
+        train_dfs, targetLabels)
+    neighbor, instances_train_neighbor, target_train_neighbor, target_test_neighbor, predictionsNeighbor = neighborsPrediction.neighborsPrediction(
+        train_dfs, targetLabels, fold_cv)
+    randFor, instances_train_randFor, target_train_randFor, target_test_randFor, predictionsRandFor = randomForestPrediction.randomForestPrediction(
+        train_dfs, targetLabels, fold_cv)
+
+    printPredictions(treeVar, instances_train_tree, target_train_tree, target_test_tree, predictionsTree,
+                     neighbor, instances_train_neighbor, target_train_neighbor, target_test_neighbor,
+                     predictionsNeighbor,
+                     randFor, instances_train_randFor, target_train_randFor, target_test_randFor, predictionsRandFor)
+
+
+def printPredictions(treeVar, instances_train_tree, target_train_tree, target_test_tree, predictionsTree,
+                     neighbor, instances_train_neighbor, target_train_neighbor, target_test_neighbor,
+                     predictionsNeighbor,
+                     randFor, instances_train_randFor, target_train_randFor, target_test_randFor, predictionsRandFor):
+    # Output the accuracy score of the model on the test set
     print("AccuracyTree= " + str(accuracy_score(target_test_tree, predictionsTree, normalize=True)))
-    
+
     print("AccuracyNeighbor= " + str(accuracy_score(target_test_neighbor, predictionsNeighbor, normalize=True)))
-    
-    print("AccuracyRandFor= " + str(accuracy_score(target_test_randFor, predictionsRandFor, normalize=True)))    
-    
+
+    print("AccuracyRandFor= " + str(accuracy_score(target_test_randFor, predictionsRandFor, normalize=True)))
+
     # Output the confusion matrix on the test set
     confusionMatrix = confusion_matrix(target_test_tree, predictionsTree)
     print(confusionMatrix)
     print("\n\n")
-    
+
     # Draw the confusion matrix
     import matplotlib.pyplot as plt
-    
+
     # Show confusion matrix in a separate window
     plt.matshow(confusionMatrix)
     # plt.plot(confusionMatrix)
@@ -53,7 +60,7 @@ def printPredictions(treeVar,  instances_train_tree,     target_train_tree,     
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
     plt.show()
-    
+
     # --------------------------------------------
     # Cross-validation to Compare to Models
     # --------------------------------------------
@@ -63,17 +70,18 @@ def printPredictions(treeVar,  instances_train_tree,     target_train_tree,     
     print("treeDesision:")
     print("Score by fold: " + str(scoresTree))
     # we can output the mean accuracy score and standard deviation as follows:
-    print("Accuracy: %0.4f (+/- %0.2f)" % (scoresTree .mean(), scoresTree .std() * 2))
+    print("Accuracy: %0.4f (+/- %0.2f)" % (scoresTree.mean(), scoresTree.std() * 2))
     print("\n\n")
-    
-    scoresNeighbor = cross_validation.cross_val_score(neighbor, instances_train_neighbor, target_train_neighbor, cv=fold_cv)
+
+    scoresNeighbor = cross_validation.cross_val_score(neighbor, instances_train_neighbor, target_train_neighbor,
+                                                      cv=fold_cv)
     # the cross validaton function returns an accuracy score for each fold
     print("neighbor:")
     print("Score by fold: " + str(scoresNeighbor))
     # we can output the mean accuracy score and standard deviation as follows:
     print("Accuracy: %0.4f (+/- %0.2f)" % (scoresNeighbor.mean(), scoresNeighbor.std() * 2))
     print("\n\n")
-    
+
     scoresRandFor = cross_validation.cross_val_score(randFor, instances_train_randFor, target_train_randFor, cv=fold_cv)
     # the cross validaton function returns an accuracy score for each fold
     print("randFor:")
@@ -81,7 +89,6 @@ def printPredictions(treeVar,  instances_train_tree,     target_train_tree,     
     # we can output the mean accuracy score and standard deviation as follows:
     print("Accuracy: %0.4f (+/- %0.2f)" % (scoresRandFor.mean(), scoresRandFor.std() * 2))
     print("\n\n")
-    
 
 
 fold_cv = 5

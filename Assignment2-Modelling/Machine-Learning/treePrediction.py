@@ -46,7 +46,7 @@ def treePrediction(train_dfs, targetLabels):
 
     plt.subplot(212)
     # for a comparison we will do the same experiment using a decision tree that uses the Gini impurity metric
-    scores_gini = utilities.scores_calculation(scores_entropy, instances_train, dec_tree_model_3, target_train, nb_cv)
+    scores_gini = utilities.scores_calculation(instances_train, dec_tree_model_3, target_train, nb_cv)
     mean_gini = utilities.mean_calculation(scores_gini, instances_train)
     plt.plot(range(1, len(mean_gini) + 1), mean_gini)
     plt.title('Gini accuracy')
