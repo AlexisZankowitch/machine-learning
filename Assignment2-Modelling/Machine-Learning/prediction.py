@@ -11,124 +11,67 @@ from sklearn.metrics import accuracy_score
 from sklearn.feature_extraction import DictVectorizer
 import numpy as np
 import pandas as pd
-
+import matplotlib.pyplot as plt
 import treePrediction
 import neighborsPrediction
 import randomForestPrediction
 
 fold_cv = 5
+models_order = ['tree decision', 'neighbors', 'random forest']
+accuracies = []
+c_m_all = []
 
+# todo display parameters which have been chosen for each models
 
 def doPredictions(train_dfs, targetLabels, fold_cv):
-    treeVar, instances_train_tree, target_train_tree, target_test_tree, predictionsTree = treePrediction.treePrediction(
+    tree_model, instances_train_tree, target_train_tree, target_test_tree, predictions_tree = treePrediction.treePrediction(
         train_dfs, targetLabels)
-    neighbor, instances_train_neighbor, target_train_neighbor, target_test_neighbor, predictionsNeighbor, scoresNeighbor = neighborsPrediction.neighborsPrediction(
+    neighbor, instances_train_neighbor, target_train_neighbor, target_test_neighbor, predictions_neighbor, scoresNeighbor = neighborsPrediction.neighborsPrediction(
         train_dfs, targetLabels, fold_cv)
     randFor, instances_train_randFor, target_train_randFor, target_test_randFor, predictionsRandFor, scoresRandFor = randomForestPrediction.randomForestPrediction(
         train_dfs, targetLabels, fold_cv)
 
-    scoresTree = cross_validation.cross_val_score(treeVar, instances_train_tree, target_train_tree, cv=fold_cv)
-    
-    
-    if sum(scoresTree)/len(scoresTree)>sum(scoresNeighbor)/len(scoresNeighbor):
-        if sum(scoresTree)/len(scoresTree)>sum(scoresRandFor)/len(scoresRandFor):
-            test(target_test_tree, predictionsTree, scoresTree)
-        elif sum(scoresRandFor)/len(scoresRandFor)>sum(scoresNeighbor)/len(scoresNeighbor):
-            test(target_test_randFor, predictionsRandFor, scoresRandFor)
-    elif sum(scoresNeighbor)/len(scoresNeighbor)>sum(scoresRandFor)/len(scoresRandFor):
-        test(target_test_neighbor, predictionsNeighbor, scoresNeighbor)
-                
-            
+    # confusion matrix and accuracy for each model
+    c_m_tree, accuracy_tree = final_model_decision(target_test_tree, predictions_tree)
+    accuracies.append(accuracy_tree)
+    c_m_all.append(c_m_tree)
+    print("Confusion matrix tree")
+    print(c_m_tree)
+    print("Accuracy= " + str(accuracy_tree))
+    c_m_neighbor, accuracy_neighbor = final_model_decision(target_test_neighbor, predictions_neighbor)
+    accuracies.append(accuracy_neighbor)
+    c_m_all.append(c_m_neighbor)
+    print("Confusion matrix neighbor")
+    print(c_m_neighbor)
+    print("Accuracy= " + str(accuracy_neighbor))
+    c_m_rand_for, accuracy_rand_for = final_model_decision(target_test_randFor, predictionsRandFor)
+    accuracies.append(accuracy_rand_for)
+    c_m_all.append(c_m_rand_for)
+    print("Confusion matrix random forest")
+    print(c_m_rand_for)
+    print("Accuracy= " + str(accuracy_neighbor))
 
-def test(target_test, predictions, scores):
-    # Output the accuracy score of the model on the test set
-    print("Accuracy= " + str(accuracy_score(target_test, predictions, normalize=True)))
+    # final test to determine which model is the best
+    index_accuracy = accuracies.index(max([accuracy_tree, accuracy_neighbor, accuracy_rand_for]))
 
-    # Output the confusion matrix on the test set
-    confusionMatrix = confusion_matrix(target_test, predictions)
-    print(confusionMatrix)
-    print("\n\n")
-
-    # Draw the confusion matrix
-    import matplotlib.pyplot as plt
-
-    # Show confusion matrix in a separate window
-    plt.matshow(confusionMatrix)
+    #display
+    print("The best model is: " + models_order[index_accuracy] + " its accuracy is: " + str(accuracies[index_accuracy]))
+    plt.matshow(c_m_all[index_accuracy])
     # plt.plot(confusionMatrix)
-    plt.title('Confusion matrix')
+    plt.title('Confusion matrix' + models_order[index_accuracy])
     plt.colorbar()
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
     plt.show()
 
-    # the cross validaton function returns an accuracy score for each fold
-    print("Desision:")
-    print("Score by fold: " + str(scores))
-    # we can output the mean accuracy score and standard deviation as follows:
-    print("Accuracy: %0.4f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
-    print("\n\n")
 
-def printPredictions(treeVar, instances_train_tree, target_train_tree, target_test_tree, predictionsTree,
-                     neighbor, instances_train_neighbor, target_train_neighbor, target_test_neighbor,
-                     predictionsNeighbor,
-                     randFor, instances_train_randFor, target_train_randFor, target_test_randFor, predictionsRandFor):
+def final_model_decision(target_test, predictions):
     # Output the accuracy score of the model on the test set
-    print("AccuracyTree= " + str(accuracy_score(target_test_tree, predictionsTree, normalize=True)))
-
-    print("AccuracyNeighbor= " + str(accuracy_score(target_test_neighbor, predictionsNeighbor, normalize=True)))
-
-    print("AccuracyRandFor= " + str(accuracy_score(target_test_randFor, predictionsRandFor, normalize=True)))
-
+    model_accuracy = accuracy_score(target_test, predictions, normalize=True)
     # Output the confusion matrix on the test set
-    confusionMatrix = confusion_matrix(target_test_tree, predictionsTree)
-    print(confusionMatrix)
-    print("\n\n")
+    c_m = confusion_matrix(target_test, predictions)
+    return c_m, model_accuracy
 
-    # Draw the confusion matrix
-    import matplotlib.pyplot as plt
-
-    # Show confusion matrix in a separate window
-    plt.matshow(confusionMatrix)
-    # plt.plot(confusionMatrix)
-    plt.title('Confusion matrix')
-    plt.colorbar()
-    plt.ylabel('True label')
-    plt.xlabel('Predicted label')
-    plt.show()
-
-    # --------------------------------------------
-    # Cross-validation to Compare to Models
-    # --------------------------------------------
-    # run a 5 fold cross validation on this model using the full census data
-    scoresTree = cross_validation.cross_val_score(treeVar, instances_train_tree, target_train_tree, cv=fold_cv)
-    # the cross validaton function returns an accuracy score for each fold
-    print("treeDesision:")
-    print("Score by fold: " + str(scoresTree))
-    # we can output the mean accuracy score and standard deviation as follows:
-    print("Accuracy: %0.4f (+/- %0.2f)" % (scoresTree.mean(), scoresTree.std() * 2))
-    print("\n\n")
-
-    scoresNeighbor = cross_validation.cross_val_score(neighbor, instances_train_neighbor, target_train_neighbor,
-                                                      cv=fold_cv)
-    # the cross validaton function returns an accuracy score for each fold
-    print("neighbor:")
-    print("Score by fold: " + str(scoresNeighbor))
-    # we can output the mean accuracy score and standard deviation as follows:
-    print("Accuracy: %0.4f (+/- %0.2f)" % (scoresNeighbor.mean(), scoresNeighbor.std() * 2))
-    print("\n\n")
-
-    scoresRandFor = cross_validation.cross_val_score(randFor, instances_train_randFor, target_train_randFor, cv=fold_cv)
-    # the cross validaton function returns an accuracy score for each fold
-    print("randFor:")
-    print("Score by fold: " + str(scoresRandFor))
-    # we can output the mean accuracy score and standard deviation as follows:
-    print("Accuracy: %0.4f (+/- %0.2f)" % (scoresRandFor.mean(), scoresRandFor.std() * 2))
-    print("\n\n")
-
-
-
-
-fold_cv = 5
 
 # Reading the dataset from a local file
 # ---------------------------------------------
