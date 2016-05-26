@@ -19,19 +19,54 @@ import randomForestPrediction
 fold_cv = 5
 
 
-def doPredictions(train_dfs, targetLabels):
+def doPredictions(train_dfs, targetLabels, fold_cv):
     treeVar, instances_train_tree, target_train_tree, target_test_tree, predictionsTree = treePrediction.treePrediction(
         train_dfs, targetLabels)
-    neighbor, instances_train_neighbor, target_train_neighbor, target_test_neighbor, predictionsNeighbor = neighborsPrediction.neighborsPrediction(
+    neighbor, instances_train_neighbor, target_train_neighbor, target_test_neighbor, predictionsNeighbor, scoresNeighbor = neighborsPrediction.neighborsPrediction(
         train_dfs, targetLabels, fold_cv)
-    randFor, instances_train_randFor, target_train_randFor, target_test_randFor, predictionsRandFor = randomForestPrediction.randomForestPrediction(
+    randFor, instances_train_randFor, target_train_randFor, target_test_randFor, predictionsRandFor, scoresRandFor = randomForestPrediction.randomForestPrediction(
         train_dfs, targetLabels, fold_cv)
 
-    printPredictions(treeVar, instances_train_tree, target_train_tree, target_test_tree, predictionsTree,
-                     neighbor, instances_train_neighbor, target_train_neighbor, target_test_neighbor,
-                     predictionsNeighbor,
-                     randFor, instances_train_randFor, target_train_randFor, target_test_randFor, predictionsRandFor)
+    scoresTree = cross_validation.cross_val_score(treeVar, instances_train_tree, target_train_tree, cv=fold_cv)
+    
+    
+    if sum(scoresTree)/len(scoresTree)>sum(scoresNeighbor)/len(scoresNeighbor):
+        if sum(scoresTree)/len(scoresTree)>sum(scoresRandFor)/len(scoresRandFor):
+            test(target_test_tree, predictionsTree, scoresTree)
+        elif sum(scoresRandFor)/len(scoresRandFor)>sum(scoresNeighbor)/len(scoresNeighbor):
+            test(target_test_randFor, predictionsRandFor, scoresRandFor)
+    elif sum(scoresNeighbor)/len(scoresNeighbor)>sum(scoresRandFor)/len(scoresRandFor):
+        test(target_test_neighbor, predictionsNeighbor, scoresNeighbor)
+                
+            
 
+def test(target_test, predictions, scores):
+    # Output the accuracy score of the model on the test set
+    print("Accuracy= " + str(accuracy_score(target_test, predictions, normalize=True)))
+
+    # Output the confusion matrix on the test set
+    confusionMatrix = confusion_matrix(target_test, predictions)
+    print(confusionMatrix)
+    print("\n\n")
+
+    # Draw the confusion matrix
+    import matplotlib.pyplot as plt
+
+    # Show confusion matrix in a separate window
+    plt.matshow(confusionMatrix)
+    # plt.plot(confusionMatrix)
+    plt.title('Confusion matrix')
+    plt.colorbar()
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
+    plt.show()
+
+    # the cross validaton function returns an accuracy score for each fold
+    print("Desision:")
+    print("Score by fold: " + str(scores))
+    # we can output the mean accuracy score and standard deviation as follows:
+    print("Accuracy: %0.4f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
+    print("\n\n")
 
 def printPredictions(treeVar, instances_train_tree, target_train_tree, target_test_tree, predictionsTree,
                      neighbor, instances_train_neighbor, target_train_neighbor, target_test_neighbor,
@@ -91,6 +126,8 @@ def printPredictions(treeVar, instances_train_tree, target_train_tree, target_te
     print("\n\n")
 
 
+
+
 fold_cv = 5
 
 # Reading the dataset from a local file
@@ -117,4 +154,4 @@ vec_cat_dfs = vectorizer.fit_transform(cat_dfs)
 # Merge Categorical and Numeric Descriptive Features
 train_dfs = np.hstack((numeric_dfs.as_matrix(), vec_cat_dfs))
 
-doPredictions(train_dfs, targetLabels)
+doPredictions(train_dfs, targetLabels, fold_cv)
