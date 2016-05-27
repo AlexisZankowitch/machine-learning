@@ -38,6 +38,7 @@ def treePrediction(train_dfs, targetLabels):
     # entropy
     plt.subplot(211)
     scores_entropy = utilities.scores_calculation(instances_train, dec_tree_model_2, target_train, nb_cv)
+    print(scores_entropy)
     mean_entropy = utilities.mean_calculation(scores_entropy, instances_train)
     plt.plot(range(1, len(mean_entropy) + 1), mean_entropy)
     plt.title('Entropy accuracy')

@@ -28,7 +28,7 @@ def randomForestPrediction(train_dfs, targetLabels, fold_cv):
     randFor.fit(train_dfs, targetLabels)
     instances_train, instances_test, target_train, target_test = cross_validation.train_test_split(train_dfs,
                                                                                                    targetLabels,
-                                                                                                   test_size=0.2,
+                                                                                                   test_size=0.4,
                                                                                                    random_state=0)
     predictions = randFor.predict(instances_test)
     return randFor, instances_train, target_train, target_test, predictions, scoresRandFor
@@ -40,7 +40,7 @@ def testScore(train_dfs, targetLabels, fold_cv, n_estimators):
 
     instances_train, instances_test, target_train, target_test = cross_validation.train_test_split(train_dfs,
                                                                                                    targetLabels,
-                                                                                                   test_size=0.2,
+                                                                                                   test_size=0.4,
                                                                                                    random_state=0)
 
     scoresRandFor = cross_validation.cross_val_score(randFor, instances_train, target_train, cv=fold_cv)

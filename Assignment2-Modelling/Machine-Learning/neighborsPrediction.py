@@ -21,7 +21,14 @@ def neighborsPrediction(train_dfs, targetLabels, fold_cv):
            n_neighbors=i
            # print(sum(scoresNeighborTmp)/len(scoresNeighborTmp))
 
-    neighbor, instances_train, instances_test, target_train, target_test, scoresNeighbor = testScore(train_dfs, targetLabels, fold_cv, n_neighbors)
+    neighbor = KNeighborsClassifier(n_neighbors)
+    neighbor.fit(train_dfs, targetLabels)
+
+    instances_train, instances_test, target_train, target_test = cross_validation.train_test_split(train_dfs,
+                                                                                                   targetLabels,
+                                                                                                   test_size=0.4,
+                                                                                                   random_state=0)
+
     predictions = neighbor.predict(instances_test)
     return neighbor, instances_train, target_train, target_test, predictions, scoresNeighbor
 
@@ -30,7 +37,7 @@ def testScore(train_dfs, targetLabels, fold_cv, n_neighbors):
     neighbor.fit(train_dfs, targetLabels)
 
     instances_train, instances_test, target_train, target_test = cross_validation.train_test_split(train_dfs, targetLabels,
-                                                                                                   test_size=0.2,
+                                                                                                   test_size=0.4,
                                                                                                    random_state=0)
 
     scoresNeighbor = cross_validation.cross_val_score(neighbor, instances_train, target_train, cv=fold_cv)
