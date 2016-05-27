@@ -50,7 +50,7 @@ def doPredictions(train_dfs, targetLabels, fold_cv):
     c_m_all.append(c_m_rand_for)
     print("Confusion matrix random forest")
     print(c_m_rand_for)
-    print("Accuracy= " + str(accuracy_neighbor))
+    print("Accuracy= " + str(accuracy_rand_for))
 
     # final test to determine which model is the best
     index_accuracy = accuracies.index(max([accuracy_tree, accuracy_neighbor, accuracy_rand_for]))

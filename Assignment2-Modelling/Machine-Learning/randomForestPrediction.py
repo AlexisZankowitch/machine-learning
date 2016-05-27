@@ -15,7 +15,7 @@ def randomForestPrediction(train_dfs, targetLabels, fold_cv):
     scoresRandFor = [0.0]
     n_estimators = 0
 
-    for i in range(1, 3):
+    for i in range(1, 10):
         randFor, instances_train, instances_test, target_train, target_test, scoresRandForTmp = testScore(train_dfs,
                                                                                                           targetLabels,
                                                                                                           fold_cv, i)

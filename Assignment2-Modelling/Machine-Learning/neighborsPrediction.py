@@ -14,7 +14,7 @@ def neighborsPrediction(train_dfs, targetLabels, fold_cv):
     scoresNeighbor = [0.0]
     n_neighbors = 0
 
-    for i in range(1,3):
+    for i in range(1,10):
         neighbor, instances_train, instances_test, target_train, target_test, scoresNeighborTmp = testScore(train_dfs, targetLabels, fold_cv, i)
         if sum(scoresNeighborTmp)/len(scoresNeighborTmp)>sum(scoresNeighbor)/len(scoresNeighbor) :
            scoresNeighbor=scoresNeighborTmp

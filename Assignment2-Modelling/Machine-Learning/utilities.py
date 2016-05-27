@@ -20,7 +20,8 @@ def scores_calculation(instances, my_tree, target, nb_cv):
         for x in range(0, len(instances)):
             # run a 5 fold cross validation on this model using the full census data
             scores_x_entropy = cross_validation.cross_val_score(my_tree, instances[x], target[x],
-                                                                cv=nb_cv)
+                                                                cv=nb_cv)                                                             
+                                                                
             scores[y].append(scores_x_entropy.mean())
             # Show entropy accuracy
     return scores
