@@ -53,16 +53,41 @@ def doPredictions(train_dfs, targetLabels, fold_cv):
     print("Accuracy= " + str(accuracy_rand_for))
 
     # final test to determine which model is the best
-    index_accuracy = accuracies.index(max([accuracy_tree, accuracy_neighbor, accuracy_rand_for]))
+    index_accuracy = accuracies.index(max(accuracies))
 
-    # display
+    # display C_M
+    plt.figure()
     print("The best model is: " + models_order[index_accuracy] + " its accuracy is: " + str(accuracies[index_accuracy]))
-    plt.matshow(c_m_all[index_accuracy])
-    # plt.plot(confusionMatrix)
-    plt.title('Confusion matrix' + models_order[index_accuracy])
+    plt.subplot(311)
+    plt.matshow(c_m_all[0])
+    title_str = 'Confusion matrix' + models_order[0]
+    if index_accuracy == 0:
+        title_str += "best model"
+    plt.title(title_str)
     plt.colorbar()
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
+
+    plt.figure()
+    plt.matshow(c_m_all[1])
+    title_str = 'Confusion matrix' + models_order[1]
+    if index_accuracy == 1:
+        title_str += "best model"
+    plt.title(title_str)
+    plt.colorbar()
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
+
+    plt.figure()
+    plt.matshow(c_m_all[2])
+    title_str = 'Confusion matrix' + models_order[2]
+    if index_accuracy == 2:
+        title_str += "best model"
+    plt.title(title_str)
+    plt.colorbar()
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
+
     plt.show()
 
 

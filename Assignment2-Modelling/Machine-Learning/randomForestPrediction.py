@@ -18,10 +18,10 @@ def randomForestPrediction(train_dfs, targetLabels, fold_cv):
     for i in range(1, 10):
         randFor, instances_train, instances_test, target_train, target_test, scoresRandForTmp = testScore(train_dfs,
                                                                                                           targetLabels,
-                                                                                                          fold_cv, i)
+                                                                                                          fold_cv, i*10)
         if sum(scoresRandForTmp) / len(scoresRandForTmp) > sum(scoresRandFor) / len(scoresRandFor):
             scoresRandFor = scoresRandForTmp
-            n_estimators = i
+            n_estimators = i*10
             # print(sum(scoresRandForTmp)/len(scoresRandForTmp))
 
     randFor = RandomForestClassifier(n_estimators)
@@ -31,6 +31,7 @@ def randomForestPrediction(train_dfs, targetLabels, fold_cv):
                                                                                                    test_size=0.4,
                                                                                                    random_state=0)
     predictions = randFor.predict(instances_test)
+    print("Generate random forest with: {0} estimators".format(str(n_estimators)))
     return randFor, instances_train, target_train, target_test, predictions, scoresRandFor
 
 
