@@ -10,6 +10,8 @@ from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score
 import matplotlib.pyplot as plt
 import utilities
+from sklearn.datasets import load_iris
+from sklearn import tree
 
 
 def treePrediction(train_dfs, targetLabels):
@@ -94,5 +96,10 @@ def treePrediction(train_dfs, targetLabels):
     # plt.ylabel('True label')
     # plt.xlabel('Predicted label')
     # plt.show()
+
+    # tree drawing
+    clf = tree.DecisionTreeClassifier()
+    clf = clf.fit(train_dfs, targetLabels)
+    tree.export_graphviz(clf, out_file='tree.dot')
 
     return tree_final, instances_train, target_train, target_test, predictions
